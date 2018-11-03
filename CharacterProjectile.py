@@ -59,6 +59,7 @@ class CharacterProjectile:
                     monster.hp -= main_state.character.damage
                     if main_state.character.weapon == 1:
                         self.delete = True
+                        break
                     if main_state.character.weapon == 2:
                         monster.hit = True
                         monster.hitchecker = main_state.character.idling_timer

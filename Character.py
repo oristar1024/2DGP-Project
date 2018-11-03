@@ -2,7 +2,8 @@ from pico2d import *
 import random
 import CharacterProjectile
 import main_state
-
+from functions import *
+import game_framework
 
 class Character:
     def __init__(self):
@@ -16,6 +17,9 @@ class Character:
         self.can_attack = True
         self.attack_delay_checker = 0
         self.bomb_range = 120
+        self.hit = False
+        self.hp = 100
+        self.hitchecker = 0
 
         if self.weapon == 1:
             self.image = load_image('assassin.png')
@@ -35,6 +39,18 @@ class Character:
 
     def update(self):
         self.idling_timer = (self.idling_timer + 1) % 30
+
+        for monster in main_state.monsters:
+            if get_dist(self.x, self.y, monster.x, monster.y) < 40 and self.hit == False:
+                self.hp -= 10
+                self.hit = True
+                self.hitchecker = self.idling_timer
+
+        if self.hp <= 0:
+            game_framework.running = False
+
+        if self.hitchecker == self.idling_timer -10 or self.hitchecker == self.idling_timer + 20:
+            self.hit = False
 
         if self.weapon == 1 and self.can_attack == False:
             if self.attack_delay_checker == self.idling_timer - 2 or self.attack_delay_checker == self.idling_timer + 28:
@@ -105,8 +121,11 @@ class Character:
             self.head_frame -= 1
 
     def draw(self):
-        if self.body == 1 and self.left_move:
-            self.image.clip_composite_draw(8 + 32 * self.body_frame, 850 - 42 * self.body, 32, 30, 0, 'h', self.x, self.y - 15, 32, 30)
+        if self.hit:
+            self.image.clip_draw(8, 620, 42, 42, self.x, self.y)
         else:
-            self.image.clip_draw(8 + 32 * self.body_frame, 850 - 42 * self.body, 32, 30, self.x, self.y - 15)
-        self.image.clip_draw(4 + 40 * self.head + 40 * self.head_frame, 900, 40, 30, self.x, self.y)
+            if self.body == 1 and self.left_move:
+                self.image.clip_composite_draw(8 + 32 * self.body_frame, 850 - 42 * self.body, 32, 30, 0, 'h', self.x, self.y - 15, 32, 30)
+            else:
+                self.image.clip_draw(8 + 32 * self.body_frame, 850 - 42 * self.body, 32, 30, self.x, self.y - 15)
+            self.image.clip_draw(4 + 40 * self.head + 40 * self.head_frame, 900, 40, 30, self.x, self.y)
