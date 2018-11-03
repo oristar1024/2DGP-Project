@@ -15,13 +15,14 @@ character = None
 mouse = None
 map = None
 monsters = None
+kill_counter = 0
 
 def enter():
     global character, mouse, map, monsters
     character = Character.Character()
     mouse = Mouse.Mouse()
     map = Map.Map()
-    monsters = [Monster.Monster() for i in range(10)]
+    monsters = [Monster.Monster() for i in range(30)]
 
 def exit():
     pass
@@ -29,6 +30,8 @@ def exit():
 def update():
     global character, monsters
     global character_projectile
+    global kill_counter
+
     character.update()
     for i in range(30):
         if character_projectile[i] != None:
@@ -36,8 +39,14 @@ def update():
             if character_projectile[i].delete:
                 character_projectile[i] = None
 
+    kill_counter = 0
     for monster in monsters:
-        monster.update()
+        if monster.dead == False:
+            monster.update()
+        else:
+            kill_counter += 1
+    if kill_counter == 30:
+        pass
 
 def draw():
     global character, monsters
@@ -46,7 +55,7 @@ def draw():
     map.draw()
 
     for monster in monsters:
-        if monster.hp > 0:
+        if monster.dead == False:
             monster.draw()
 
     for projectile in character_projectile:

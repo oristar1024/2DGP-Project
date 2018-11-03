@@ -5,6 +5,9 @@ import main_state
 from functions import *
 import game_framework
 
+SCREEN_WIDTH = 1024
+SCREEN_HEIGHT = 768
+
 class Character:
     def __init__(self):
         self.x, self.y = 100, 100
@@ -20,6 +23,7 @@ class Character:
         self.hit = False
         self.hp = 100
         self.hitchecker = 0
+        self.font = load_font('ENCR10B.TTF', 16)
 
         if self.weapon == 1:
             self.image = load_image('assassin.png')
@@ -49,7 +53,7 @@ class Character:
         if self.hp <= 0:
             game_framework.running = False
 
-        if self.hitchecker == self.idling_timer -10 or self.hitchecker == self.idling_timer + 20:
+        if self.hitchecker == self.idling_timer - 20 or self.hitchecker == self.idling_timer + 10:
             self.hit = False
 
         if self.weapon == 1 and self.can_attack == False:
@@ -129,3 +133,4 @@ class Character:
             else:
                 self.image.clip_draw(8 + 32 * self.body_frame, 850 - 42 * self.body, 32, 30, self.x, self.y - 15)
             self.image.clip_draw(4 + 40 * self.head + 40 * self.head_frame, 900, 40, 30, self.x, self.y)
+        self.font.draw(50, SCREEN_HEIGHT - 50, '(hp : %d)' % self.hp, (255, 255, 0))
