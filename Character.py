@@ -126,3 +126,5 @@ class Character:
                 self.image.clip_draw(8 + 32 * self.body_frame, 850 - 42 * self.body, 32, 30, self.x, self.y - 15)
             self.image.clip_draw(4 + 40 * self.head + 40 * self.head_frame, 900, 40, 30, self.x, self.y)
         self.font.draw(50, SCREEN_HEIGHT - 50, '(hp : %d)' % self.hp, (255, 255, 0))
+        self.font.draw(50, SCREEN_HEIGHT - 70, '(dmg : %d)' % self.damage, (255, 255, 0))
+        self.font.draw(50, SCREEN_HEIGHT - 90, '(range : %d)' % self.range, (255, 255, 0))
