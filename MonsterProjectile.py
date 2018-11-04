@@ -29,13 +29,12 @@ class MonsterProjectile:
         else:
             self.delete = True
 
-        if main_state.character.hit == False and crush_check_line(self.old_x, self.old_y, self.x + self.move_x * 30, self.y + self.move_y * 30 , main_state.character.x - 25, main_state.character.y -25, main_state.character.x +25, main_state.character.y +25):
-            main_state.character.hit = True
-            main_state.character.hp -= 10
-            main_state.character.hitchecker = main_state.character.idling_timer
-            self.delete = True
-
-
+        if main_state.character.hit == False and get_dist(main_state.character.x, main_state.character.y, self.x +self.move_x * 20, self.y + self.move_y * 20):
+            if crush_check_line(self.old_x, self.old_y, self.x + self.move_x * 20, self.y + self.move_y * 20, main_state.character.x - 25, main_state.character.y - 25, main_state.character.x + 25, main_state.character.y + 25):
+                main_state.character.hit = True
+                main_state.character.hp -= 10
+                main_state.character.hitchecker = main_state.character.idling_timer
+                self.delete = True
 
 
     def draw(self):
