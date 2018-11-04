@@ -1,5 +1,4 @@
 from pico2d import *
-import random
 import CharacterProjectile
 import main_state
 from functions import *
@@ -40,15 +39,17 @@ class Character:
             self.range = 480
             self.bullet_speed = 40
             self.damage = 60
+        self.item = self.damage / 2
 
     def update(self):
         self.idling_timer = get_time()
 
         for monster in main_state.monsters:
-            if get_dist(self.x, self.y, monster.x, monster.y) < 40 and self.hit == False:
-                self.hp -= 10
-                self.hit = True
-                self.hitchecker = self.idling_timer
+            if monster.dead == False:
+                if get_dist(self.x, self.y, monster.x, monster.y) < 40 and self.hit == False:
+                    self.hp -= 10
+                    self.hit = True
+                    self.hitchecker = self.idling_timer
 
         if self.hp <= 0:
             game_framework.running = False

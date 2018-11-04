@@ -52,7 +52,7 @@ class CharacterProjectile:
                 self.y += self.move_y * 15
 
         for monster in main_state.monsters:
-            if monster.hit == False and monster.hp > 0 and crush_check_line(self.old_x, self.old_y, self.x + self.move_x * 45, self.y + self.move_y * 25, monster.box_x1, monster.box_y1, monster.box_x2, monster.box_y2):
+            if monster.hit == False and monster.dead == False and monster.hp > 0 and crush_check_line(self.old_x, self.old_y, self.x + self.move_x * 45, self.y + self.move_y * 25, monster.box_x1, monster.box_y1, monster.box_x2, monster.box_y2):
                 if main_state.character.weapon == 3:
                     self.bomb = True
                 elif main_state.character.weapon != 3:

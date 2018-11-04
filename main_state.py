@@ -7,6 +7,7 @@ import CharacterProjectile
 import Monster
 import Mouse
 import Map
+import Item
 
 hide_cursor()
 character_projectile = [None for i in range(30)]
@@ -18,13 +19,23 @@ mouse = None
 map = None
 monsters = None
 kill_counter = 0
+items = [None, None]
+clear = False
 
 def enter():
     global character, mouse, map, monsters
+    global items
     character = Character.Character()
     mouse = Mouse.Mouse()
     map = Map.Map()
     monsters = [Monster.Monster() for i in range(30)]
+    items = [Item.Item() for i in range(2)]
+    items[0].x = 400
+    items[0].y = 768/2
+    items[0].type = 1
+    items[1].x = 600
+    items[1].y = 768/2
+    items[1].type = 2
 
 def exit():
     pass
@@ -33,6 +44,7 @@ def update():
     global character, monsters
     global character_projectile
     global kill_counter
+    global clear
 
     character.update()
     for i in range(30):
@@ -47,17 +59,25 @@ def update():
                 monster_projectile[i] = None
 
     kill_counter = 0
-    for monster in monsters:
-        if monster.dead == False:
-            monster.update()
-        else:
-            kill_counter += 1
-    if kill_counter == 30:
-        pass
+    if clear == False:
+        for monster in monsters:
+            if monster.dead == False:
+                monster.update()
+            else:
+                kill_counter += 1
+        if kill_counter == 30:
+            for item in items:
+                item.comeup = True
+            clear = True
+
+    for item in items:
+        if item.comeup:
+            item.update()
 
 def draw():
     global character, monsters
     global character_projectile
+    global items
     clear_canvas()
     map.draw()
 
@@ -72,6 +92,10 @@ def draw():
     for projectile in monster_projectile:
         if projectile != None:
             projectile.draw()
+
+    for item in items:
+        if item.comeup:
+            item.draw()
 
     character.draw()
     mouse.draw()
@@ -103,6 +127,9 @@ def handle_events():
 
             elif event.key == SDLK_ESCAPE:
                 running = False
+            elif event.key == SDLK_t:
+                for monster in monsters:
+                    monster.dead = True
         elif event.type == SDL_MOUSEMOTION:
             mouse.x, mouse.y = event.x, 768 - 1 - event.y
         elif event.type == SDL_MOUSEBUTTONDOWN and character.can_attack:
