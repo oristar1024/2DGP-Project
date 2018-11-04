@@ -98,7 +98,7 @@ def handle_events():
             character_projectile[projectile_array_index] = CharacterProjectile.CharacterProjectile()
             projectile_array_index = (projectile_array_index + 1) % 30
             character.can_attack = False
-            character.attack_delay_checker = character.idling_timer + 1
+            character.attack_delay_checker = character.idling_timer
 
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_w:

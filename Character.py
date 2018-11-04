@@ -13,7 +13,7 @@ class Character:
         self.x, self.y = 100, 100
         self.x_dir, self.y_dir = 0, 0
         self.left_move, self.right_move, self.up_move, self.down_move = False, False, False, False
-        self.idling_timer = 0
+        self.idling_timer = get_time()
         self.head, self.body = 0, 0
         self.head_frame , self.body_frame = 0, 0
         self.weapon = random.randint(1, 3)
@@ -42,7 +42,7 @@ class Character:
             self.damage = 60
 
     def update(self):
-        self.idling_timer = (self.idling_timer + 1) % 30
+        self.idling_timer = get_time()
 
         for monster in main_state.monsters:
             if get_dist(self.x, self.y, monster.x, monster.y) < 40 and self.hit == False:
@@ -53,24 +53,16 @@ class Character:
         if self.hp <= 0:
             game_framework.running = False
 
-        if self.hitchecker == self.idling_timer - 20 or self.hitchecker == self.idling_timer + 10:
+        if self.hitchecker <= self.idling_timer - 2:
             self.hit = False
 
         if self.weapon == 1 and self.can_attack == False:
-            if self.attack_delay_checker == self.idling_timer - 2 or self.attack_delay_checker == self.idling_timer + 28:
+            if self.attack_delay_checker <= self.idling_timer - 0.1:
                 main_state.character_projectile[main_state.projectile_array_index] = CharacterProjectile.CharacterProjectile()
                 main_state.projectile_array_index = (main_state.projectile_array_index + 1) % 30
-            elif self.attack_delay_checker == self.idling_timer - 4 or self.attack_delay_checker == self.idling_timer + 26:
-                main_state.character_projectile[main_state.projectile_array_index] = CharacterProjectile.CharacterProjectile()
-                main_state.projectile_array_index = (main_state.projectile_array_index + 1) % 30
-            elif self.attack_delay_checker == self.idling_timer - 6 or self.attack_delay_checker == self.idling_timer + 24:
-                main_state.character_projectile[main_state.projectile_array_index] = CharacterProjectile.CharacterProjectile()
-                main_state.projectile_array_index = (main_state.projectile_array_index + 1) % 30
-            elif self.attack_delay_checker == self.idling_timer - 8 or self.attack_delay_checker == self.idling_timer + 22:
-                main_state.character_projectile[main_state.projectile_array_index] = CharacterProjectile.CharacterProjectile()
-                main_state.projectile_array_index = (main_state.projectile_array_index + 1) % 30
+                self.attack_delay_checker = self.idling_timer
 
-        if self.attack_delay_checker == self.idling_timer - 10 or self.attack_delay_checker == self.idling_timer + 20:
+        if self.attack_delay_checker <= self.idling_timer - 1:
             self.can_attack = True
 
         if self.x_dir != 0 or self.y_dir != 0:
