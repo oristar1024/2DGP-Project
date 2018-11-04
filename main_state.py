@@ -10,6 +10,8 @@ import Map
 
 hide_cursor()
 character_projectile = [None for i in range(30)]
+monster_projectile = [None for i in range(1000)]
+mp_array_index = 0
 projectile_array_index = 0
 character = None
 mouse = None
@@ -38,6 +40,11 @@ def update():
             character_projectile[i].update()
             if character_projectile[i].delete:
                 character_projectile[i] = None
+    for i in range(1000):
+        if monster_projectile[i] != None:
+            monster_projectile[i].update()
+            if monster_projectile[i].delete:
+                monster_projectile[i] = None
 
     kill_counter = 0
     for monster in monsters:
@@ -59,6 +66,10 @@ def draw():
             monster.draw()
 
     for projectile in character_projectile:
+        if projectile != None:
+            projectile.draw()
+
+    for projectile in monster_projectile:
         if projectile != None:
             projectile.draw()
 

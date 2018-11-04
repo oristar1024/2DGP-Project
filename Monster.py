@@ -2,6 +2,8 @@ from pico2d import *
 import random
 import main_state
 from functions import *
+import MonsterProjectile
+import math
 SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 768
 
@@ -33,6 +35,8 @@ class Monster:
         self.move_y= 0
         self.mx, self.my = 0, 0
         self.dead = False
+        self.attack_delay_checker = 0
+        self.can_attack = True
 
     def update(self):
         if self.hp <= 0:
@@ -63,6 +67,11 @@ class Monster:
                     else:
                         self.x += self.move_x * self.speed
                         self.y += self.move_y * self.speed
+                    if self.can_attack:
+                        main_state.monster_projectile[main_state.mp_array_index] = MonsterProjectile.MonsterProjectile(self)
+                        main_state.mp_array_index = (main_state.mp_array_index + 1) % 1000
+                        self.can_attack = False
+                        self.attack_delay_checker = main_state.character.idling_timer
 
             elif self.type == 2:
                 if get_dist(self.x, self.y, main_state.character.x, main_state.character.y) < 1000:
@@ -74,6 +83,17 @@ class Monster:
                     else:
                         self.x += self.move_x * self.speed
                         self.y += self.move_y * self.speed
+                    if self.can_attack:
+                        for i in range(8):
+                            main_state.monster_projectile[main_state.mp_array_index] = MonsterProjectile.MonsterProjectile(self)
+                            main_state.monster_projectile[main_state.mp_array_index].move_x = math.cos(math.radians(i * 45))
+                            main_state.monster_projectile[main_state.mp_array_index].move_y = math.sin(math.radians(i * 45))
+                            main_state.mp_array_index = (main_state.mp_array_index + 1) % 1000
+                        self.can_attack = False
+                        self.attack_delay_checker = main_state.character.idling_timer
+
+            if self.can_attack == False and self.attack_delay_checker <= main_state.character.idling_timer - 2:
+                self.can_attack = True
 
             self.box_x1 = self.x - 25
             self.box_x2 = self.x + 25
