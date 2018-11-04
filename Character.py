@@ -16,7 +16,7 @@ class Character:
         self.idling_timer = get_time()
         self.head, self.body = 0, 0
         self.head_frame , self.body_frame = 0, 0
-        self.weapon = random.randint(1, 3)
+        self.weapon = game_framework.weapon
         self.can_attack = True
         self.attack_delay_checker = 0
         self.bomb_range = 120
