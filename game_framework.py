@@ -41,6 +41,7 @@ class TestGameState:
 running = None
 stack = None
 weapon = 0
+difficulty = 0
 
 def change_state(state):
     global stack

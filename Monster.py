@@ -4,6 +4,7 @@ import main_state
 from functions import *
 import MonsterProjectile
 import math
+import game_framework
 SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 768
 
@@ -12,7 +13,7 @@ class Monster:
     global SCREEN_WIDTH, SCREEN_HEIGHT
     def __init__(self):
         self.x, self.y = random.randint(100 + 50, SCREEN_WIDTH - 50), random.randint(100 + 50, SCREEN_HEIGHT - 50)
-        self.hp = 100
+        self.hp = 50 * game_framework.difficulty
         self.box_x1 = self.x - 25
         self.box_x2 = self.x + 25
         self.box_y1 = self.y - 25

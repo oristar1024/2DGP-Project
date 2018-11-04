@@ -2,20 +2,20 @@ import game_framework
 from pico2d import *
 
 
-name = "TitleState"
+name = "DifficultyState"
 image = None
 
 
 def enter():
     global image
-    image = load_image('title.png')
+    image = load_image('difficulty.png')
 
 
 def exit():
     global image
     del(image)
 
-import difficulty_state
+import main_state
 
 def handle_events():
     events = get_events()
@@ -26,14 +26,14 @@ def handle_events():
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 game_framework.quit()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_1):
-                game_framework.weapon = 1
+                game_framework.difficulty = 1
                 game_framework.change_state(main_state)
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_2):
-                game_framework.weapon = 2
+                game_framework.difficulty = 2
                 game_framework.change_state(main_state)
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_3):
-                game_framework.weapon = 3
-                game_framework.change_state(difficulty_state)
+                game_framework.difficulty = 3
+                game_framework.change_state(main_state)
 
 
 def draw():
