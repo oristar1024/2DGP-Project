@@ -69,11 +69,11 @@ def update():
         if kill_counter == 60:
             for item in items:
                 item.comeup = True
-                items[0].x = 1900 - map.window_left
-                items[0].y = 1500 - map.window_bottom
+                items[0].x = character.x - 100
+                items[0].y = character.y
                 items[0].type = 1
-                items[1].x = 2100 - map.window_left
-                items[1].y = 1500 - map.window_bottom
+                items[1].x = character.x + 100
+                items[1].y = character.y
                 items[1].type = 2
             clear = True
 

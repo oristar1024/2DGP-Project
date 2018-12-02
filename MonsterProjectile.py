@@ -19,7 +19,6 @@ class MonsterProjectile:
             self.move_y = (self.target_y - self.y) / get_dist(self.x, self.y, self.target_x, self.target_y)
             self.move_x = (self.target_x - self.x) / get_dist(self.x, self.y, self.target_x, self.target_y)
         self.old_x, self.old_y = self.x, self.y
-
     def update(self):
         global character_projectile
         if self.i < self.move_count and self.delete == False:
