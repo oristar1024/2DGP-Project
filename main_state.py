@@ -8,6 +8,7 @@ import Monster
 import Mouse
 import Map
 import Item
+import Boss
 
 hide_cursor()
 character_projectile = [None for i in range(30)]
@@ -21,6 +22,8 @@ monsters = None
 kill_counter = 0
 items = [None, None]
 clear = False
+boss_comeup = 0
+boss = None
 
 def enter():
     global character, mouse, map, monsters
@@ -28,14 +31,8 @@ def enter():
     character = Character.Character()
     mouse = Mouse.Mouse()
     map = Map.Map()
-    monsters = [Monster.Monster() for i in range(30)]
+    monsters = [Monster.Monster() for i in range(60)]
     items = [Item.Item() for i in range(2)]
-    items[0].x = 400
-    items[0].y = 768/2
-    items[0].type = 1
-    items[1].x = 600
-    items[1].y = 768/2
-    items[1].type = 2
 
 def exit():
     pass
@@ -45,8 +42,12 @@ def update():
     global character_projectile
     global kill_counter
     global clear
+    global boss_comeup
+    global boss
+    global map
 
     character.update()
+    map.update()
     for i in range(30):
         if character_projectile[i] != None:
             character_projectile[i].update()
@@ -65,19 +66,36 @@ def update():
                 monster.update()
             else:
                 kill_counter += 1
-        if kill_counter == 30:
+        if kill_counter == 60:
             for item in items:
                 item.comeup = True
+                items[0].x = 1900 - map.window_left
+                items[0].y = 1500 - map.window_bottom
+                items[0].type = 1
+                items[1].x = 2100 - map.window_left
+                items[1].y = 1500 - map.window_bottom
+                items[1].type = 2
             clear = True
 
     for item in items:
         if item.comeup:
             item.update()
 
+    if boss_comeup == 2:
+        boss = Boss.Boss()
+        boss_comeup += 1
+
+    if boss_comeup == 3:
+        boss.update()
+
+
+
 def draw():
     global character, monsters
     global character_projectile
     global items
+    global boss_comeup
+    global boss
     clear_canvas()
     map.draw()
 
@@ -96,6 +114,9 @@ def draw():
     for item in items:
         if item.comeup:
             item.draw()
+
+    if boss_comeup == 3:
+        boss.draw()
 
     character.draw()
     mouse.draw()

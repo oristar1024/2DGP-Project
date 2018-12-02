@@ -1,6 +1,6 @@
 import game_framework
 from pico2d import *
-
+import main_state
 
 name = "TitleState"
 image = None
@@ -27,10 +27,10 @@ def handle_events():
                 game_framework.quit()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_1):
                 game_framework.weapon = 1
-                game_framework.change_state(main_state)
+                game_framework.change_state(difficulty_state)
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_2):
                 game_framework.weapon = 2
-                game_framework.change_state(main_state)
+                game_framework.change_state(difficulty_state)
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_3):
                 game_framework.weapon = 3
                 game_framework.change_state(difficulty_state)

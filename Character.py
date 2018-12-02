@@ -3,13 +3,12 @@ import CharacterProjectile
 import main_state
 from functions import *
 import game_framework
-
 SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 768
 
 class Character:
     def __init__(self):
-        self.x, self.y = 100, 100
+        self.x, self.y = 1024 / 2, 768 / 2
         self.x_dir, self.y_dir = 0, 0
         self.left_move, self.right_move, self.up_move, self.down_move = False, False, False, False
         self.idling_timer = get_time()
@@ -23,6 +22,7 @@ class Character:
         self.hp = 100
         self.hitchecker = 0
         self.font = load_font('ENCR10B.TTF', 16)
+
 
         if self.weapon == 1:
             self.image = load_image('assassin.png')
@@ -108,6 +108,8 @@ class Character:
         self.x += self.x_dir
         self.y += self.y_dir
 
+        self.x = clamp(50, self.x, 3950)
+        self.y = clamp(150, self.y, 2750)
         self.idling()
 
     def idling(self):
@@ -118,14 +120,16 @@ class Character:
             self.head_frame -= 1
 
     def draw(self):
+        cx, cy = self.x - main_state.map.window_left, self.y - main_state.map.window_bottom
+
         if self.hit:
-            self.image.clip_draw(8, 620, 42, 42, self.x, self.y)
+            self.image.clip_draw(8, 620, 42, 42, cx, cy)
         else:
             if self.body == 1 and self.left_move:
-                self.image.clip_composite_draw(8 + 32 * self.body_frame, 850 - 42 * self.body, 32, 30, 0, 'h', self.x, self.y - 15, 32, 30)
+                self.image.clip_composite_draw(8 + 32 * self.body_frame, 850 - 42 * self.body, 32, 30, 0, 'h', cx, cy - 15, 32, 30)
             else:
-                self.image.clip_draw(8 + 32 * self.body_frame, 850 - 42 * self.body, 32, 30, self.x, self.y - 15)
-            self.image.clip_draw(4 + 40 * self.head + 40 * self.head_frame, 900, 40, 30, self.x, self.y)
+                self.image.clip_draw(8 + 32 * self.body_frame, 850 - 42 * self.body, 32, 30, cx, cy- 15)
+            self.image.clip_draw(4 + 40 * self.head + 40 * self.head_frame, 900, 40, 30, cx, cy)
         self.font.draw(50, SCREEN_HEIGHT - 50, '(hp : %d)' % self.hp, (255, 255, 0))
         self.font.draw(50, SCREEN_HEIGHT - 70, '(dmg : %d)' % self.damage, (255, 255, 0))
         self.font.draw(50, SCREEN_HEIGHT - 90, '(range : %d)' % self.range, (255, 255, 0))

@@ -15,9 +15,11 @@ class Item:
             elif self.type == 2:
                 main_state.character.hp += 100
             self.comeup = False
+            main_state.boss_comeup += 1
 
     def draw(self):
+        cx, cy = self.x - main_state.map.window_left, self.y - main_state.map.window_bottom
         if self.type == 1:
-            self.image.clip_draw(0, 0, 68, 68, self.x, self.y)
+            self.image.clip_draw(0, 0, 68, 68, cx, cy)
         elif self.type == 2:
-            self.image.clip_draw(68 * 2, 0, 68, 68, self.x, self.y)
+            self.image.clip_draw(68 * 2, 0, 68, 68, cx, cy)

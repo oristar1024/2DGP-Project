@@ -12,7 +12,7 @@ class Monster:
     global character
     global SCREEN_WIDTH, SCREEN_HEIGHT
     def __init__(self):
-        self.x, self.y = random.randint(100 + 50, SCREEN_WIDTH - 50), random.randint(100 + 50, SCREEN_HEIGHT - 50)
+        self.x, self.y = random.randint(50, 3950), random.randint(150, 2750)
         self.hp = 50 * game_framework.difficulty
         self.box_x1 = self.x - 25
         self.box_x2 = self.x + 25
@@ -96,10 +96,10 @@ class Monster:
             if self.can_attack == False and self.attack_delay_checker <= main_state.character.idling_timer - 2:
                 self.can_attack = True
 
-            self.box_x1 = self.x - 25
-            self.box_x2 = self.x + 25
-            self.box_y1 = self.y - 25
-            self.box_y2 = self.y + 25
+            self.box_x1 = self.x - 25 - main_state.map.window_left
+            self.box_x2 = self.x + 25- main_state.map.window_bottom
+            self.box_y1 = self.y - 25- main_state.map.window_left
+            self.box_y2 = self.y + 25- main_state.map.window_bottom
 
             if self.move_x < 0:
                 self.mx = -self.move_x
@@ -120,22 +120,24 @@ class Monster:
                     self.dir = 2
                 else:
                     self.dir = 1
-
+        self.x = clamp(50, self.x, 3950)
+        self.y = clamp(150, self.y, 2750)
 
 
 
     def draw(self):
+        cx, cy = self.x - main_state.map.window_left, self.y - main_state.map.window_bottom
         if self.type == 0:
             if self.dir == 0 or self.dir == 1 or self.dir == 2:
-                self.image.clip_draw(self.frame * 48, self.dir * 48, 48, 48, self.x, self.y)
+                self.image.clip_draw(self.frame * 48, self.dir * 48, 48, 48, cx, cy)
             else:
-                self.image.clip_composite_draw(self.frame * 48, 0, 48, 48, 0, 'h', self.x, self.y, 48, 48)
+                self.image.clip_composite_draw(self.frame * 48, 0, 48, 48, 0, 'h', cx, cy, 48, 48)
         elif self.type == 1:
             if self.dir == 0 or self.dir == 1:
-                self.image.clip_draw(48 * 6 + self.frame * 48, 96, 48, 48, self.x, self.y)
+                self.image.clip_draw(48 * 6 + self.frame * 48, 96, 48, 48, cx, cy)
             elif self.dir == 2:
-                self.image.clip_draw(48 * 6 + self.frame * 48, 48, 48, 48, self.x, self.y)
+                self.image.clip_draw(48 * 6 + self.frame * 48, 48, 48, 48, cx, cy)
             else:
-                self.image.clip_composite_draw(48 * 6 + self.frame * 48, 96, 48, 48, 0, 'h', self.x, self.y, 48, 48)
+                self.image.clip_composite_draw(48 * 6 + self.frame * 48, 96, 48, 48, 0, 'h', cx, cy, 48, 48)
         elif self.type == 2:
-            self.image.clip_draw(self.frame * 32, 96, 32, 32, self.x, self.y)
+            self.image.clip_draw(self.frame * 32, 96, 32, 32, cx, cy)
